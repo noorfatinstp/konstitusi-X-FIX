@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hafalan Konstitusi dan Amandemen</title>
+<style>
+:root{--bg:#f6f7f3;--card:#fff;--ink:#1d2a24;--mute:#5d6b64;--line:#d5dcd4;--acc:#1f6f54;--accink:#fff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#131916;--card:#1c2520;--ink:#e8efe9;--mute:#9aa8a0;--line:#2e3b34;--acc:#5fc39d;--accink:#0d1a14}}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 Georgia,"Times New Roman",serif}
+main{max-width:640px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:1.45rem;margin:0 0 4px}
+.sub{margin:0 0 16px;color:var(--mute);font-size:.95rem}
+label{display:block;font-weight:bold;margin:14px 0 6px;font-size:.95rem}
+select,input[type=number]{width:100%;border:1.5px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:inherit;padding:12px}
+button{font:inherit;font-weight:bold;border:0;border-radius:10px;padding:13px 18px;background:var(--acc);color:var(--accink);width:100%;margin-top:16px;cursor:pointer}
+button.alt{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.top{display:flex;justify-content:space-between;align-items:baseline;color:var(--mute);font-size:.95rem}
+.timer{font-size:2.4rem;font-weight:bold;font-variant-numeric:tabular-nums;color:var(--ink)}
+.bar{height:8px;background:var(--line);border-radius:6px;overflow:hidden;margin:6px 0 16px}
+.bar i{display:block;height:100%;background:var(--acc);width:100%}
+.card{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:18px 18px 8px}
+.card h2{font-size:1.2rem;margin:0 0 10px}
+.card ul{margin:0;padding-left:20px}
+.card li{margin:0 0 12px;font-size:1.15rem;line-height:1.5}
+.big{text-align:center;font-size:1.4rem;font-weight:bold;margin:70px 0 10px}
+.hint{color:var(--mute);font-size:.95rem;text-align:center}
+.rev .card{margin-bottom:14px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+<h1>Hafalan Konstitusi dan Amandemen</h1>
+<p class="sub" id="sub">Pendidikan Pancasila. Tiap kartu tampil sebentar, lalu berganti.</p>
+
+<section id="setup">
+  <label for="ses">Pilih sesi</label>
+  <select id="ses"></select>
+  <label for="sec">Waktu tiap kartu (detik)</label>
+  <input id="sec" type="number" min="10" max="180" value="60">
+  <p class="hint" id="info"></p>
+  <button id="go">Mulai</button>
+  <p class="hint">Mulai bersamaan saat guru memberi aba-aba. Kartu tidak bisa diulang.</p>
+</section>
+
+<section id="read" hidden>
+  <div class="top"><span id="cnt"></span><span class="timer" id="tm">0:00</span></div>
+  <div class="bar"><i id="br"></i></div>
+  <div class="card"><h2 id="ch"></h2><ul id="cl"></ul></div>
+</section>
+
+<section id="hand" hidden>
+  <div class="big">Semua kartu sudah tampil</div>
+  <p class="hint" style="font-size:1.1rem">Taruh HP di meja dengan layar menghadap bawah, lalu serahkan ke guru. Tulis yang kamu ingat di buku tulis.</p>
+  <button class="alt" id="rv" style="margin-top:60px">Buka ringkasan (hanya setelah selesai menulis)</button>
+</section>
+
+<section id="review" hidden class="rev">
+  <p class="sub">Cocokkan tulisanmu dengan ringkasan ini.</p>
+  <div id="rl"></div>
+  <button id="back">Kembali ke awal</button>
+</section>
+</main>
+<script>
+(function(){
+var S=[
+{t:"Konstitusi dan Amandemen UUD 1945",c:[
+ {h:"Pengertian konstitusi",p:["Konstitusi adalah aturan dasar tertinggi suatu negara.","Isi konstitusi mengatur siapa yang memimpin, apa batas kekuasaannya, dan apa hak serta kewajiban rakyat."]},
+ {h:"Isi pokok konstitusi",p:["1. Jaminan hak warga negara dan HAM","2. Susunan lembaga negara dan wewenangnya","3. Pembagian dan pembatasan kekuasaan","4. Cara mengubah konstitusi"]},
+ {h:"Fungsi konstitusi",p:["1. Membatasi kekuasaan pemerintah","2. Melindungi hak warga negara","3. Menjadi hukum tertinggi (sumber hukum aturan di bawahnya)","4. Membagi wewenang antarlembaga negara"]},
+ {h:"Tujuan konstitusi",p:["1. Menjamin hak dan kebebasan warga","2. Menciptakan ketertiban dan keadilan","3. Mencegah penyalahgunaan kekuasaan","4. Mewujudkan tujuan negara"]},
+ {h:"Jenis konstitusi",p:["1. Tertulis (contoh: UUD 1945)","2. Tidak tertulis (contoh: konvensi / pidato kenegaraan presiden setiap tanggal 16 Agustus)","3. Rigid/kaku (sulit diubah, syaratnya ketat)","4. Fleksibel (mudah diubah)"]},
+ {h:"UUD 1945",p:["Disahkan oleh PPKI pada 18 Agustus 1945, sehari setelah proklamasi.","Pembukaan: 4 alinea. Alinea ke-4 memuat Pancasila dan tujuan negara.","Batang tubuh: pasal-pasal tentang lembaga negara dan hak warga.","Tertulis dan agak rigid, karena mengubahnya butuh syarat ketat (Pasal 37)."]},
+ {h:"Hierarki peraturan",p:["Urutan yang di bawah tidak boleh bertentangan dengan yang di atas:","UUD 1945 → TAP MPR → UU/Perppu → Peraturan Pemerintah → Perpres → Perda Provinsi → Perda Kabupaten/Kota"]},
+ {h:"Pengertian amandemen",p:["Amandemen adalah perubahan resmi pada isi konstitusi (menambah, mengurangi, atau mengubah pasal) tanpa mengganti konstitusinya."]},
+ {h:"Kenapa UUD 1945 diamandemen?",p:["Sebelum amandemen, kekuasaan presiden sangat besar dan masa jabatannya tidak dibatasi dengan tegas.","Presiden bisa menjabat lebih dari 30 tahun (masa Orde Baru)."]},
+ {h:"Kenapa UUD 1945 diamandemen? (lanjutan)",p:["Reformasi 1998 menuntut perubahan, dan MPR mengamandemen UUD 1945 sebanyak empat kali (tahun 1999, 2000, 2001, 2002)."]},
+ {h:"Hasil amandemen",p:["1. Pemilihan presiden (sebelum: dipilih oleh MPR, sesudah: dipilih langsung oleh rakyat)","2. Masa jabatan presiden (sebelum: dapat dipilih kembali tanpa batas tegas, sesudah: maksimal 2 periode)","3. Pemilu (sebelum: tidak diatur, sesudah: diatur dalam UUD, 5 tahun sekali)"]},
+ {h:"Cara amandemen",p:["1. Usul diajukan minimal 1/3 anggota MPR, tertulis, menyebut pasal yang diubah dan alasannya.","2. Sidang dihadiri minimal 2/3 anggota MPR.","3. Putusan sah jika disetujui minimal 50% + 1 dari seluruh anggota MPR (bukan hanya yang hadir).","4. Bentuk NKRI tidak boleh diubah."]}
+]}];
+var $=function(i){return document.getElementById(i)};
+var secs=['setup','read','hand','review'];
+function show(n){secs.forEach(function(s){$(s).hidden=(s!==n)});window.scrollTo(0,0)}
+function fmt(s){var m=Math.floor(s/60),r=s%60;return m+':'+(r<10?'0':'')+r}
+var sel=$('ses');
+S.forEach(function(s,i){var o=document.createElement('option');o.value=i;o.textContent=s.t+' ('+s.c.length+' kartu)';sel.appendChild(o)});
+function info(){var n=S[sel.value].c.length,d=Math.max(10,parseInt($('sec').value,10)||60);$('info').textContent='Total sekitar '+Math.round(n*d/60*10)/10+' menit.'}
+sel.onchange=info;$('sec').oninput=info;info();
+var iv=null,lock=null;
+function keepAwake(){try{if(navigator.wakeLock){navigator.wakeLock.request('screen').then(function(l){lock=l}).catch(function(){})}}catch(e){}}
+function release(){try{if(lock){lock.release();lock=null}}catch(e){}}
+function card(c){
+  $('ch').textContent=c.h;var ul=$('cl');ul.innerHTML='';
+  c.p.forEach(function(t){var li=document.createElement('li');li.textContent=t;ul.appendChild(li)});
+}
+$('go').onclick=function(){
+  var ses=S[sel.value],d=Math.max(10,parseInt($('sec').value,10)||60),i=0;
+  keepAwake();show('read');
+  function next(){
+    if(i>=ses.c.length){clearInterval(iv);release();show('hand');return}
+    card(ses.c[i]);$('cnt').textContent='Kartu '+(i+1)+' dari '+ses.c.length;
+    var end=Date.now()+d*1000;clearInterval(iv);
+    function tick(){
+      var left=Math.max(0,Math.ceil((end-Date.now())/1000));
+      $('tm').textContent=fmt(left);$('br').style.width=(left/d*100)+'%';
+      if(left<=0){clearInterval(iv);i++;next()}
+    }
+    tick();iv=setInterval(tick,250);
+  }
+  next();
+};
+$('rv').onclick=function(){
+  var ses=S[sel.value],box=$('rl');box.innerHTML='';
+  ses.c.forEach(function(c){
+    var d=document.createElement('div');d.className='card';
+    var h=document.createElement('h2');h.textContent=c.h;d.appendChild(h);
+    var ul=document.createElement('ul');
+    c.p.forEach(function(t){var li=document.createElement('li');li.textContent=t;ul.appendChild(li)});
+    d.appendChild(ul);box.appendChild(d);
+  });
+  show('review');
+};
+$('back').onclick=function(){show('setup')};
+})();
+</script>
+</body>
+</html>
